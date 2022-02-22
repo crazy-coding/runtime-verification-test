@@ -1,5 +1,5 @@
 ### Usage and Setup
-- Clone this repo. Go into the root folder and run *yarn* to install the dependencies.
+- Clone this repo. Go into the root folder and run `yarn` to install the dependencies.
 - Create a .env file in the root folder and set these variables: 
   ```
   REACT_APP_CLIENT_ID=0f0beecf7fd73353297c
@@ -11,4 +11,4 @@
   SERVER_PORT=5000
   MONGO_ATLAS_URI=mongodb+srv://root:root@cluster0.dbfx0.mongodb.net/test
   ```
-- Run *yarn start* to start the app
+- Run `yarn start` to start the app
