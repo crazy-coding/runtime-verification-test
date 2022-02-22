@@ -22,7 +22,6 @@ export default function Blockchain() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data[0])
         setData({
           ...data[0],
           isLoading: false,
@@ -50,7 +49,7 @@ export default function Blockchain() {
             onClick={() => handleScan()}
           >
             <BlockChainIcon />
-            <span>Scan in Blockchain</span>
+            <span>Store Ethereum</span>
           </a>
         )}
       </div>

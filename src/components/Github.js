@@ -72,7 +72,7 @@ export default function Github() {
             }}
           >
             <GithubIcon />
-            <span>Login with GitHub</span>
+            <span>Sign in with GitHub</span>
           </a>
         )}
       </div>

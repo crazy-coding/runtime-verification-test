@@ -81,7 +81,7 @@ app.post("/scan", (req, res) => {
             } else {
               console.log(`Added a new match with id ${result.insertedId}`);
               dbConnect
-                .collection("listingsAndReviews")
+                .collection("rv")
                 .find(matchDocument).limit(50)
                 .toArray(function (err, result) {
                   if (err) {
@@ -95,9 +95,7 @@ app.post("/scan", (req, res) => {
         } else {
           res.json(result);
         }
-      });
-
-  
+    });
 })
 
 app.post("/blockchain", (req, res) => {
@@ -105,10 +103,10 @@ app.post("/blockchain", (req, res) => {
 
   var web3 = new Web3();
 
-  var signature = web3.eth.getAccounts().then(res => console.log(res))
-  // console.log(signature)
+  var signature = web3.eth.accounts.wallet
+  console.log(signature)
 
-  
+  res.json(signature)
 })
 
 app.get("/", (req, res) => {

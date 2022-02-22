@@ -52,7 +52,7 @@ export default function Wallet() {
             onClick={() => handleConnect()}
           >
             <EthereumIcon />
-            <span>Connect Wallet</span>
+            <span>Connect to MetaMask wallet</span>
           </a>
         )}
       </div>

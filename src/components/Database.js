@@ -50,7 +50,7 @@ export default function Database() {
             onClick={() => state.isLoggedIn && state.isConnected ? handleScan() : {}}
           >
             <DatabaseAddIcon />
-            <span>Scan in Database</span>
+            <span>Store DataBase</span>
           </a>
         )}
       </div>
