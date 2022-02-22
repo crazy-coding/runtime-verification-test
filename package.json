@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "concurrently \"cd server && nodemon index.js \" \"react-scripts start\" ",
-    "start": "react-scripts start",
+    "start": "concurrently \"cd server && nodemon index.js \" \"react-scripts start\" ",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
