@@ -42,7 +42,7 @@ export default function Blockchain() {
 
   useEffect(() => {
     if (state.web3.eth) {
-      const ervTest = new state.web3.eth.Contract(ABI, CONTRACT);
+      const ervTest = new state.web3.eth.Contract(ABI, CONTRACT, { from: state.wallet, gasPrice: '20000000000' });
       setRVTest(ervTest);
     }
   }, [state.web3.eth]);
@@ -56,15 +56,14 @@ export default function Blockchain() {
   const checkAccount = async () => {
     setData({...data, isLoading: true});
     const account = await rvTest.methods.get().call();
-    console.log(account, "000")
     setData({...data, isExist: account === state.user?.login, isLoading: false});
   }
 
   const handleSet = async () => {
-    await rvTest.methods.set(state.user?.login).send({ from: state.wallet });
+    await rvTest.methods.set(state.user?.login).send();
   }
 
-  return !data.tx ? (
+  return !data.isExist ? (
     <Wrapper>
       <div className="section">
         <span>{data.errorMessage}</span>
