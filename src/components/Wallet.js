@@ -1,12 +1,27 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Styled from "styled-components";
 import { AuthContext } from "../App";
 import EthereumIcon from "mdi-react/EthereumIcon";
-
+import Web3 from 'web3';
 
 export default function Wallet() {
   const { state, dispatch } = useContext(AuthContext);
   const [data, setData] = useState({ errorMessage: "", isLoading: false });
+
+  useEffect(() => {
+    connectWallet();
+  }, [])
+
+  const connectWallet = async () => {
+    const web3 = new Web3(window.ethereum);
+    dispatch({
+      type: "WEB3",
+      payload: { web3 }
+    });
+    await window.ethereum.enable();
+    const accounts = await web3.eth.getAccounts();
+    return accounts[0];
+  }
 
   const handleConnect = async () => {
     const { ethereum } = window;
@@ -17,11 +32,11 @@ export default function Wallet() {
 
     try {
       setData({ ...data, isLoading: true });
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const account = await connectWallet();
 
       dispatch({
         type: "CONNECT",
-        payload: { wallet: accounts[0], isConnected: true }
+        payload: { wallet: account, isConnected: true }
       });
       setData({ ...data, isLoading: false });
     } catch (err) {

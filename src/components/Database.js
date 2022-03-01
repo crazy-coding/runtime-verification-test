@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Styled from "styled-components";
 import DatabaseAddIcon from "mdi-react/DatabaseAddIcon";
 import { AuthContext } from "../App";
@@ -8,7 +8,11 @@ export default function Database() {
   const { state, dispatch } = useContext(AuthContext);
   const [data, setData] = useState({ items: [], errorMessage: "", isLoading: false });
 
-  const handleScan = () => {
+  useEffect(() => {
+    handleScan();
+  }, [state.isLoggedIn, state.isConnected, state.wallet])
+
+  const handleStore = () => {
     const scan_url = state.scan_url;
 
     const requestData = {
@@ -22,13 +26,33 @@ export default function Database() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data[0])
         setData({
           ...data[0],
           isLoading: false,
         });
       })
       .catch(error => {
+        console.log(error)
+        setData({
+          isLoading: false,
+          errorMessage: "Sorry! Login failed"
+        });
+      });
+  }
+
+  const handleScan = () => {
+    const scan_url = state.scan_url;
+
+    fetch(`${scan_url}?wallet=${state.wallet}&username=${state.user?.login}`)
+      .then(response => response.json())
+      .then(data => {
+        setData({
+          ...data[0],
+          isLoading: false,
+        });
+      })
+      .catch(error => {
+        console.log("23error323", error)
         setData({
           isLoading: false,
           errorMessage: "Sorry! Login failed"
@@ -47,7 +71,7 @@ export default function Database() {
         ) : (
           <a
             className={`login-link ${state.isLoggedIn && state.isConnected ? '' : 'disabled'}`}
-            onClick={() => state.isLoggedIn && state.isConnected ? handleScan() : {}}
+            onClick={() => state.isLoggedIn && state.isConnected ? handleStore() : {}}
           >
             <DatabaseAddIcon />
             <span>Store DataBase</span>

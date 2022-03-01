@@ -1,38 +1,67 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Styled from "styled-components";
 import BlockChainIcon from "mdi-react/BlockChainIcon";
 import { AuthContext } from "../App";
 
+const CONTRACT = "0x706D34aC0993C1f6AA147Fed229543E23A377254";
+const ABI = [
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "un",
+				"type": "string"
+			}
+		],
+		"name": "set",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "get",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
 
 export default function Blockchain() {
   const { state, dispatch } = useContext(AuthContext);
-  const [data, setData] = useState({ items: [], errorMessage: "", isLoading: false });
+  const [data, setData] = useState({ isExist: false, errorMessage: "", isLoading: false });
+  const [rvTest, setRVTest] = useState({});
 
-  const handleScan = () => {
-    const blockchain_url = state.blockchain_url;
+  useEffect(() => {
+    if (state.web3.eth) {
+      const ervTest = new state.web3.eth.Contract(ABI, CONTRACT);
+      setRVTest(ervTest);
+    }
+  }, [state.web3.eth]);
 
-    const requestData = {
-      wallet: state.wallet,
-      username: state.user?.login,
-    };
+  useEffect(() => {
+    if (rvTest.methods) {
+      checkAccount()
+    }
+  }, [state.isLoggedIn, state.isConnected, rvTest.methods])
 
-    fetch(blockchain_url, {
-      method: "POST",
-      body: JSON.stringify(requestData)
-    })
-      .then(response => response.json())
-      .then(data => {
-        setData({
-          ...data[0],
-          isLoading: false,
-        });
-      })
-      .catch(error => {
-        setData({
-          isLoading: false,
-          errorMessage: "Sorry! Login failed"
-        });
-      });
+  const checkAccount = async () => {
+    setData({...data, isLoading: true});
+    const account = await rvTest.methods.get().call();
+    console.log(account, "000")
+    setData({...data, isExist: account === state.user?.login, isLoading: false});
+  }
+
+  const handleSet = async () => {
+    await rvTest.methods.set(state.user?.login).send({ from: state.wallet });
   }
 
   return !data.tx ? (
@@ -45,8 +74,8 @@ export default function Blockchain() {
           </div>
         ) : (
           <a
-            className="login-link"
-            onClick={() => handleScan()}
+            className={`login-link ${state.isLoggedIn && state.isConnected ? '' : 'disabled'}`}
+            onClick={() => handleSet()}
           >
             <BlockChainIcon />
             <span>Store Ethereum</span>
@@ -58,7 +87,7 @@ export default function Blockchain() {
     <Wrapper>
       <div className="section">
         <div className="wallet-info">
-          <span>{data.tx}</span>
+          {data.isExist && <span>correlated on blockchain</span>}
         </div>
       </div>
     </Wrapper>

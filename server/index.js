@@ -98,15 +98,24 @@ app.post("/scan", (req, res) => {
     });
 })
 
-app.post("/blockchain", (req, res) => {
-  const { username, wallet } = req.body;
+app.get("/scan", (req, res) => {
+  const { username, wallet } = req.query;
 
-  var web3 = new Web3();
+  const dbConnect = dbo.getDb();
+  const matchDocument = {
+    username,
+    wallet
+  };
 
-  var signature = web3.eth.accounts.wallet
-  console.log(signature)
-
-  res.json(signature)
+  dbConnect
+    .collection("rv")
+    .find(matchDocument).limit(50)
+    .toArray(function (err, result) {
+      if (err) {
+        res.status(400).send("Error fetching listings!");
+      }
+      res.json(result);
+    });
 })
 
 app.get("/", (req, res) => {

@@ -9,6 +9,7 @@ export const initialState = {
   proxy_url: process.env.REACT_APP_PROXY_URL,
   scan_url: process.env.REACT_APP_SCAN_URL,
   blockchain_url: process.env.REACT_APP_BLOCKCHAIN_URL,
+  web3: {},
 };
 
 export const reducer = (state, action) => {
@@ -47,6 +48,12 @@ export const reducer = (state, action) => {
         ...state,
         isConnected: false,
         wallet: null
+      };
+    }
+    case "WEB3": {
+      return {
+        ...state,
+        web3: action.payload.web3,
       };
     }
     default:
