@@ -20,9 +20,13 @@ mongodb+srv://root:root@cluster0.dbfx0.mongodb.net/test?authSource=admin&replica
 
 ### Configuration Metamask
 - Connect Metamask to RSK testnet
+
 Network Name: RSK Testnet
+
 New RPC URL: https://public-node.testnet.rsk.co
+
 ChainID (optional): 31
+
 Symbol (optional): tR-BTC
 
 - TestNet Faucet
